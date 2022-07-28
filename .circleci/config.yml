@@ -24,7 +24,7 @@ jobs:
       - checkout
       - run:
           name: "Say my name"
-          command: "echo <<_name>>"
+          command: "echo $_name"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
