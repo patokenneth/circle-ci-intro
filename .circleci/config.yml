@@ -20,7 +20,7 @@ jobs:
       - run:
           name: "Save hello"
           command: echo "My name is Chiemezie" > workspace/output.txt
-      - persist_to_workspce:
+      - persist_to_workspace:
           root: workspace
           paths:
             - output.txt
