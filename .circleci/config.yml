@@ -19,7 +19,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - sayhello:
-          to: << pipeline.id >>
+          to: "Help"
       - return: 1
 
   save-my-name-output:
