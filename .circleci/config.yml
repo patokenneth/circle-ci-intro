@@ -3,7 +3,7 @@
 version: 2.1
 
 commands:
-  sayHello:
+  sayhello:
     description: "A sample output"
     parameters:
       to:
@@ -18,7 +18,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - sayHello:
+      - sayhello:
           to: << pipeline.id >>
 
   save-my-name-output:
