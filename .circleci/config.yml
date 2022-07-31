@@ -1,9 +1,25 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine.
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
+Commands:
+  sayHello:
+    description: "A sample output"
+    parameters:
+      to:
+        type: string
+        default: "Hello somebody"
+    Steps:
+      - run: echo <<parameters.to>>
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
+  use-commands-here:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - sayHello:
+          to: <<pipeline.id>>
   save-my-name-output:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
@@ -36,6 +52,7 @@ jobs:
 workflows:
   say-hello-workflow:
     jobs:
+      - use-commands-here
       - save-my-name-output
       - print-my-name:
           requires:
