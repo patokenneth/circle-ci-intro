@@ -14,12 +14,12 @@ commands:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  # use-commands-here:
-  #   docker:
-  #     - image: cimg/base:stable
-  #   steps:
-  #     - sayhello:
-  #         to: << pipeline.id >>
+  use-commands-here:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - sayhello:
+          to: << pipeline.id >>
 
   save-my-name-output:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
@@ -31,30 +31,30 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Use error"
-          command: exit 1
-      - run:
-          name: "handle error"
-          command: echo "Non-zero error occurred"
-          when: on_fail
-      # - persist_to_workspace:
-      #     root: ~/
-      #     paths:
-      #       - output.txt
+          name: "Save hello"
+          command: echo "My name is Chiemezie" > ~/output.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output.txt
 
-  # print-my-name:
-  #   docker:
-  #     - image: cimg/base:stable
-  #   steps:
-  #     - attach_workspace:
-  #         at: ~/
-  #     - run:
-  #         name: "Say my name"
-  #         command: "cat ~/output.txt"
+  print-my-name:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: "Say my name"
+          command: "cat ~/output.txt"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   say-hello-workflow:
     jobs:
+      - use-commands-here
       - save-my-name-output
+      - print-my-name:
+          requires:
+            - save-my-name-output
