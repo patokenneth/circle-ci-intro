@@ -19,8 +19,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - sayhello:
-          to: "Help"
-      - return: 1
+          to: << pipeline.id >>
 
   save-my-name-output:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
@@ -33,22 +32,21 @@ jobs:
       - checkout
       - run:
           name: "Save hello"
-          command: echo "I am done. It failed."
-          when: on_fail
-      # - persist_to_workspace:
-      #     root: ~/
-      #     paths:
-      #       - output.txt
+          command: echo "My name is Chiemezie" > ~/output.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output.txt
 
-  # print-my-name:
-  #   docker:
-  #     - image: cimg/base:stable
-  #   steps:
-  #     - attach_workspace:
-  #         at: ~/
-  #     - run:
-  #         name: "Say my name"
-  #         command: "cat ~/output.txt"
+  print-my-name:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: "Say my name"
+          command: "cat ~/output.txt"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -57,6 +55,6 @@ workflows:
     jobs:
       - use-commands-here
       - save-my-name-output
-      # - print-my-name:
-      #     requires:
-      #       - save-my-name-output
+      - print-my-name:
+          requires:
+            - save-my-name-output
